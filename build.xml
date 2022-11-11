@@ -2,14 +2,15 @@
 
     <property name = "src.dir" value = "src"/>
     <property name = "build.dir" value="build"/>
+    <property name = "doc.dir" value="doc" />
     <property name = "classes.dir" value="${build.dir}/classes"/>
     <property name = "jar.dir" value="${build.dir}/jar"/>
-    <property name = "main-class" value="oata.HelloWorld"/>
+    <property name = "main-class" value="Main"/>
 
-    <property name = "main-class" value="oata.HelloWorld" />
 
     <target name ="clean">
         <delete dir = "${build.dir}"/>
+        <delete dir = "${doc.dir}"/>
     </target>
 
     <target name = "compile">
@@ -24,6 +25,7 @@
                 <attribute name="Main-Class" value = "${main-class}" />
             </manifest>
         </jar>
+        <jar destfile="${jar.dir}/${ant.project.name}.docs.jar" basedir="${doc.dir}"/>
     </target>
 
     <target name ="run" depends="jar">
@@ -31,5 +33,15 @@
     </target>
 
     <target name ="clean-build" depends="clean, jar" />
-    <target name = "main" depends="clean,run" />
+
+    <target name ="doc">
+        <mkdir dir = "${doc.dir}"/>
+        <javadoc packagenames="math,string" sourcepath="${src.dir}"
+                 destdir="doc">
+        </javadoc>
+        <echo message = "JavaDoc generated in /doc"/>
+    </target>
+
+    <target name = "main" depends="clean,doc,run" />
+
 </project>
